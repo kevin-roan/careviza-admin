@@ -5,7 +5,6 @@ import {
   IconPalette,
   IconUserCog,
   IconFileText,
-  IconPlus,
 } from '@tabler/icons-react'
 import { Command } from 'lucide-react'
 import { type SidebarData } from '../types'

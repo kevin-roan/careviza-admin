@@ -5,6 +5,7 @@ import { UsersInviteDialog } from './users-invite-dialog'
 
 export function UsersDialogs() {
   const { open, setOpen, currentRow, setCurrentRow } = useUsers()
+
   return (
     <>
       <UsersActionDialog
@@ -42,7 +43,7 @@ export function UsersDialogs() {
                 setCurrentRow(null)
               }, 500)
             }}
-            currentRow={currentRow}
+            user={currentRow}
           />
         </>
       )}
