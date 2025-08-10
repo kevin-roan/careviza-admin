@@ -73,3 +73,15 @@ export async function addBlogPost(data) {
     // Optionally: handle error in your app
   }
 }
+
+export async function deleteBlogById(docId: string) {
+  try {
+    const docRef = doc(db, 'blogs', docId)
+    await deleteDoc(docRef)
+    console.log(`User ${docId} deleted successfully`)
+    return { success: true }
+  } catch (error) {
+    console.error('Error deleting user:', error)
+    return { success: false, error }
+  }
+}

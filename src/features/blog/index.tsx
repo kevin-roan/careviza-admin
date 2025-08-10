@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { Link } from '@tanstack/react-router'
 import { IconPlus, IconEye, IconEdit, IconTrash } from '@tabler/icons-react'
-import { getBlogs } from '@/firebase/firestore'
+import { deleteBlogById, getBlogs } from '@/firebase/firestore'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,6 +19,7 @@ import { Main } from '@/components/layout/main'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
+import { toast } from 'sonner'
 
 // // Mock blog data
 // const blogPosts = [
@@ -47,6 +48,13 @@ export default function BlogList() {
     }
     fetchBlogs()
   }, [])
+
+  const handleDeleteBlog = async (blogId: string) => {
+    await deleteBlogById(blogId)
+
+    toast.success("Blog deleted")
+    setBlogPosts((prev) => prev.filter((blog) => blog.id !== blogId))
+  }
 
   return (
     <>
@@ -80,15 +88,17 @@ export default function BlogList() {
               <CardHeader>
                 <div className='flex items-center justify-end'>
                   <div className='items-center space-x-2 self-end rounded-md border-1 opacity-0 transition-opacity group-hover:opacity-100'>
-                    {
-                      /*
+                    {/*
                     <Button variant='ghost' size='sm'>
                       <IconEdit className='h-4 w-4' />
                     </Button>
-                      */
-                    }
+                      */}
 
-                    <Button variant='ghost' size='sm'>
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={() => handleDeleteBlog(post.id)}
+                    >
                       <IconTrash className='h-4 w-4' />
                     </Button>
                   </div>

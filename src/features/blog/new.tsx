@@ -63,7 +63,7 @@ export default function NewBlogPost() {
         tags: tags,
         title: title,
       })
-      toast("Blog Published Sucessfully")
+      toast.success('Blog Published Sucessfully')
       setTitle('')
       setDescription('')
       setContent('')
@@ -71,6 +71,7 @@ export default function NewBlogPost() {
       setNewTag('')
       setPreviewMode(false)
     } catch (error) {
+      toast.error('Error posting blog')
       console.error('Error posting blog', error)
     }
   }
