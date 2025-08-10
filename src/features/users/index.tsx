@@ -1,33 +1,43 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { getRegistrations } from '@/firebase/firestore'
+import { useEffect, useState, useCallback } from 'react'
+import { getRegistrations, updateUserStatus } from '@/firebase/firestore'
+// assume you have this
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
-import { columns } from './components/users-columns'
+import { getColumns } from './components/users-columns'
 import { UsersDialogs } from './components/users-dialogs'
 import { UsersTable } from './components/users-table'
 import UsersProvider from './context/users-context'
-// import { userListSchema } from './data/schema'
-// import { users } from './data/users'
 
 export default function Users() {
   const [userList, setUserList] = useState([])
-
-  // Parse user list
-  // const userList = userListSchema.parse(users)
 
   useEffect(() => {
     const fetchRegistrations = async () => {
       const data = await getRegistrations()
       setUserList(data)
-      console.log(data, 'data')
     }
     fetchRegistrations()
-  },[])
+  }, [])
+
+  const handleStatusChange = useCallback(
+    async (id: string, newStatus: boolean) => {
+      console.log(`Status changed for user ${id}: ${newStatus}`)
+
+      // Update the backend
+      await updateUserStatus(id, newStatus)
+
+      // Optimistic UI update
+      setUserList((prev) =>
+        prev.map((user) =>
+          user.id === id ? { ...user, status: newStatus } : user
+        )
+      )
+    },
+    []
+  )
 
   return (
     <UsersProvider>
@@ -38,7 +48,6 @@ export default function Users() {
           <ProfileDropdown />
         </div>
       </Header>
-
       <Main>
         <div className='mb-2 flex flex-wrap items-center justify-between space-y-2'>
           <div>
@@ -51,10 +60,12 @@ export default function Users() {
           </div>
         </div>
         <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-y-0 lg:space-x-12'>
-          <UsersTable data={userList} columns={columns} />
+          <UsersTable
+            data={userList}
+            columns={getColumns(handleStatusChange)}
+          />
         </div>
       </Main>
-
       <UsersDialogs />
     </UsersProvider>
   )
