@@ -10,7 +10,7 @@ const firebaseConfig = {
   appId: '1:618621742980:web:e1591f434c3f0e2ec2f7d1',
   measurementId: 'G-M332J24SNW',
 }
-
+// take it
 // const firebaseConfig = {
 //   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
 //   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
