@@ -1,5 +1,9 @@
 import { useEffect, useState, useCallback } from 'react'
-import { getRegistrations, updateUserStatus } from '@/firebase/firestore'
+import {
+  deleteUserById,
+  getRegistrations,
+  updateUserStatus,
+} from '@/firebase/firestore'
 // assume you have this
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
@@ -39,6 +43,16 @@ export default function Users() {
     []
   )
 
+  const handleDeleteUser = useCallback(async (id: string) => {
+    console.log(`Deleting user ${id}`)
+
+    // Remove from backend
+    await deleteUserById(id)
+
+    // Remove from local table
+    setUserList((prev) => prev.filter((user) => user.id !== id))
+  }, [])
+
   return (
     <UsersProvider>
       <Header fixed>
@@ -66,7 +80,7 @@ export default function Users() {
           />
         </div>
       </Main>
-      <UsersDialogs />
+      <UsersDialogs handleDeleteUser={handleDeleteUser} />
     </UsersProvider>
   )
 }

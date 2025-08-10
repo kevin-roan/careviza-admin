@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import { IconTrash } from '@tabler/icons-react'
+import { deleteUserById } from '@/firebase/firestore'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -11,18 +13,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { IconTrash } from '@tabler/icons-react'
 import { User } from '../data/schema'
 
 interface UsersDeleteDialogProps {
   user: User
   open: boolean
+  handleDeleteUser: () => void
   onOpenChange: (open: boolean) => void
 }
 
 export function UsersDeleteDialog({
   user,
   open,
+  handleDeleteUser,
   onOpenChange,
 }: UsersDeleteDialogProps) {
   const [isDeleting, setIsDeleting] = useState(false)
@@ -32,7 +35,9 @@ export function UsersDeleteDialog({
     setIsDeleting(true)
 
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await handleDeleteUser(user.id)
+
+    // await new Promise((resolve) => setTimeout(resolve, 1000))
 
     setIsDeleting(false)
     onOpenChange(false)
@@ -62,7 +67,8 @@ export function UsersDeleteDialog({
               <span className='font-medium'>Department:</span> {user.department}
             </p>
             <p className='text-sm'>
-              <span className='font-medium'>Experience:</span> {user.experience} years
+              <span className='font-medium'>Experience:</span> {user.experience}{' '}
+              years
             </p>
           </div>
         </div>

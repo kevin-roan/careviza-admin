@@ -3,7 +3,11 @@ import { UsersActionDialog } from './users-action-dialog'
 import { UsersDeleteDialog } from './users-delete-dialog'
 import { UsersInviteDialog } from './users-invite-dialog'
 
-export function UsersDialogs() {
+interface Props {
+  handleDeleteUser: () => void
+}
+
+export function UsersDialogs({ handleDeleteUser }) {
   const { open, setOpen, currentRow, setCurrentRow } = useUsers()
 
   return (
@@ -35,6 +39,7 @@ export function UsersDialogs() {
           />
 
           <UsersDeleteDialog
+            handleDeleteUser={handleDeleteUser}
             key={`user-delete-${currentRow.id}`}
             open={open === 'delete'}
             onOpenChange={() => {
