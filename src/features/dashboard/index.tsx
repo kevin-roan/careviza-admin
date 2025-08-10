@@ -28,7 +28,7 @@ export default function Dashboard() {
         <div className='mb-6 flex items-center justify-between'>
           <div>
             <h1 className='text-3xl font-bold tracking-tight'>
-              Hospital Dashboard
+              Dashboard
             </h1>
             <p className='text-muted-foreground'>
               Welcome to your hospital management dashboard

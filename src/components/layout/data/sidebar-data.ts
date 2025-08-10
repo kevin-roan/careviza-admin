@@ -17,7 +17,7 @@ export const sidebarData: SidebarData = {
   },
   teams: [
     {
-      name: 'Careviza Dashboard',
+      name: 'Careviza',
       logo: Command,
       plan: 'Nurse Management',
     },

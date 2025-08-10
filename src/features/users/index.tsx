@@ -1,3 +1,7 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { getRegistrations } from '@/firebase/firestore'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { ProfileDropdown } from '@/components/profile-dropdown'
@@ -7,12 +11,23 @@ import { columns } from './components/users-columns'
 import { UsersDialogs } from './components/users-dialogs'
 import { UsersTable } from './components/users-table'
 import UsersProvider from './context/users-context'
-import { userListSchema } from './data/schema'
-import { users } from './data/users'
+// import { userListSchema } from './data/schema'
+// import { users } from './data/users'
 
 export default function Users() {
+  const [userList, setUserList] = useState([])
+
   // Parse user list
-  const userList = userListSchema.parse(users)
+  // const userList = userListSchema.parse(users)
+
+  useEffect(() => {
+    const fetchRegistrations = async () => {
+      const data = await getRegistrations()
+      setUserList(data)
+      console.log(data, 'data')
+    }
+    fetchRegistrations()
+  },[])
 
   return (
     <UsersProvider>

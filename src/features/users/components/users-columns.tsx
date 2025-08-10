@@ -40,34 +40,38 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'fullName',
+    accessorKey: 'name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Name' />
     ),
     cell: ({ row }) => (
       <div className='flex flex-col'>
-        <LongText className='max-w-36 font-medium'>{row.getValue('fullName')}</LongText>
-        <span className='text-xs text-muted-foreground'>{row.original.email}</span>
+        <LongText className='max-w-36 font-medium'>
+          {row.getValue('name')}
+        </LongText>
+        <span className='text-muted-foreground text-xs'>
+          {row.original.email}
+        </span>
       </div>
     ),
     meta: { className: 'w-40' },
   },
   {
-    accessorKey: 'phoneNumber',
+    accessorKey: 'mobile',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Phone Number' />
     ),
-    cell: ({ row }) => <div>{row.getValue('phoneNumber')}</div>,
+    cell: ({ row }) => <div>{row.getValue('mobile')}</div>,
     enableSorting: false,
   },
   {
-    accessorKey: 'education',
+    accessorKey: 'qualification',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Education Qualification' />
+      <DataTableColumnHeader column={column} title='Qualification' />
     ),
     cell: ({ row }) => (
       <div className='max-w-48'>
-        <LongText className='text-sm'>{row.getValue('education')}</LongText>
+        <LongText className='text-sm'>{row.getValue('qualification')}</LongText>
       </div>
     ),
     enableSorting: false,
@@ -78,9 +82,7 @@ export const columns: ColumnDef<User>[] = [
       <DataTableColumnHeader column={column} title='Experience (Years)' />
     ),
     cell: ({ row }) => (
-      <div className='text-sm'>
-        {row.getValue('experience')} years
-      </div>
+      <div className='text-sm'>{row.getValue('experience')} years</div>
     ),
     enableSorting: false,
   },
@@ -97,39 +99,43 @@ export const columns: ColumnDef<User>[] = [
     enableSorting: false,
   },
   {
-    accessorKey: 'expectedSalary',
+    accessorKey: 'exp_salary',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Expected Salary' />
     ),
     cell: ({ row }) => (
       <div className='text-sm font-medium'>
-        ₹{(row.getValue('expectedSalary') as number).toLocaleString()}
+        ₹{(row.getValue('exp_salary') as number)?.toLocaleString()}
       </div>
     ),
     enableSorting: false,
   },
-  {
-    accessorKey: 'status',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Status' />
-    ),
-    cell: ({ row }) => {
-      const { status } = row.original
-      const badgeColor = callTypes.get(status)
-      return (
-        <div className='flex space-x-2'>
-          <Badge variant='outline' className={cn('capitalize', badgeColor)}>
-            {row.getValue('status')}
-          </Badge>
-        </div>
-      )
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
-    },
-    enableHiding: false,
-    enableSorting: false,
+  
+{
+  accessorKey: 'status',
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title='Status' />
+  ),
+  cell: ({ row }) => {
+    const isCalled = row.getValue('status');
+    const displayText = isCalled ? 'Called' : 'Not Called';
+    const badgeColor = callTypes.get(displayText); // adjust your map keys accordingly
+
+    return (
+      <div className='flex space-x-2'>
+        <Badge variant='outline' className={cn('capitalize', badgeColor)}>
+          {displayText}
+        </Badge>
+      </div>
+    );
   },
+  filterFn: (row, id, value) => {
+    const displayText = row.getValue(id) ? 'Called' : 'Not Called';
+    return value.includes(displayText);
+  },
+  enableHiding: false,
+  enableSorting: false,
+},
   {
     id: 'actions',
     cell: DataTableRowActions,

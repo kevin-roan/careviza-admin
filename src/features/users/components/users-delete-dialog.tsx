@@ -53,7 +53,7 @@ export function UsersDeleteDialog({
         <div className='py-4'>
           <div className='space-y-2'>
             <p className='text-sm'>
-              <span className='font-medium'>Name:</span> {user.fullName}
+              <span className='font-medium'>Name:</span> {user.name}
             </p>
             <p className='text-sm'>
               <span className='font-medium'>Email:</span> {user.email}
