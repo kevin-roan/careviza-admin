@@ -26,11 +26,11 @@ export const sidebarData: SidebarData = {
     {
       title: 'Main',
       items: [
-        {
-          title: 'Dashboard',
-          url: '/',
-          icon: IconLayoutDashboard,
-        },
+        // {
+        //   title: 'Dashboard',
+        //   url: '/',
+        //   icon: IconLayoutDashboard,
+        // },
         {
           title: 'Nurse Registration',
           url: '/users',
