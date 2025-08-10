@@ -11,7 +11,7 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID!,
 }
 
-// // Prevent re-initialization on hot-reload (important in Next.js dev mode)
+ // Prevent re-initialization on hot-reload (important in Next.js dev mode)
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
 const db = getFirestore(app)
 
