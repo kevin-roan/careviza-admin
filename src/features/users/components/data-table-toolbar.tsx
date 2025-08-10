@@ -1,11 +1,9 @@
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Table } from '@tanstack/react-table'
-
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { DataTableViewOptions } from './data-table-view-options'
-
 import { DataTableFacetedFilter } from './data-table-faceted-filter'
+import { DataTableViewOptions } from './data-table-view-options'
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -19,7 +17,8 @@ export function DataTableToolbar<TData>({
   return (
     <div className='flex items-center justify-between'>
       <div className='flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2'>
-        <Input
+        {/*
+ <Input
           placeholder='Filter users...'
           value={
             (table.getColumn('username')?.getFilterValue() as string) ?? ''
@@ -29,22 +28,17 @@ export function DataTableToolbar<TData>({
           }
           className='h-8 w-[150px] lg:w-[250px]'
         />
+          */}
+        <div>Filter By</div>
+
         <div className='flex gap-x-2'>
           {table.getColumn('status') && (
             <DataTableFacetedFilter
               column={table.getColumn('department')}
-              title='Department'
+              title='Call Status'
               options={[
-                { label: 'Emergency', value: 'emergency' },
-                { label: 'Intensive Care Unit (ICU)', value: 'icu' },
-                { label: 'Pediatrics', value: 'pediatrics' },
-                { label: 'Maternity', value: 'maternity' },
-                { label: 'Surgical', value: 'surgical' },
-                { label: 'Medical Ward', value: 'medical-ward' },
-                { label: 'Orthopedics', value: 'orthopedics' },
-                { label: 'Oncology', value: 'oncology' },
-                { label: 'Geriatrics', value: 'geriatrics' },
-                { label: 'Mental Health', value: 'mental-health' },
+                { label: 'Called', value: 'Called' },
+                { label: 'Not Called', value: 'Not Called' },
               ]}
             />
           )}
