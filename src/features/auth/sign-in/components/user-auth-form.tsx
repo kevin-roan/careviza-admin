@@ -2,7 +2,7 @@ import { HTMLAttributes, useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { IconBrandGoogle } from '@tabler/icons-react'
 import adminAuthHandler from '@/firebase/auth'
 import { cn } from '@/lib/utils'
@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
+import { toast } from 'sonner'
 
 type UserAuthFormProps = HTMLAttributes<HTMLFormElement>
 
@@ -32,6 +33,7 @@ const formSchema = z.object({
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,6 +47,24 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true)
     try {
       await adminAuthHandler(data) // wait for firebase login
+      toast.success('Successfully signed in!')
+      // Redirect to dashboard after successful login
+      navigate({ to: '/' })
+    } catch (error: any) {
+      console.error('Login error:', error)
+      let errorMessage = 'Login Failed, Invalid Credentials'
+      
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No user found with this email address'
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password'
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address'
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed attempts. Please try again later'
+      }
+      
+      toast.error(errorMessage)
     } finally {
       setIsLoading(false)
     }
@@ -84,7 +104,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           )}
         />
         <Button className='mt-2' disabled={isLoading}>
-          Login
+          {isLoading ? 'Signing in...' : 'Login'}
         </Button>
 
         <div className='relative my-2'>
@@ -93,16 +113,19 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </div>
           <div className='relative flex justify-center text-xs uppercase'>
             <span className='bg-background text-muted-foreground px-2'>
-              Or continue with
+              Note
             </span>
           </div>
         </div>
 
+        {/*
         <div className='item-center m-auto flex-1 justify-center self-center'>
           <Button variant='outline' type='button' disabled={isLoading}>
             <IconBrandGoogle className='h-4 w-4' /> Google
           </Button>
         </div>
+        */}
+
       </form>
     </Form>
   )

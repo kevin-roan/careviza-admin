@@ -1,10 +1,15 @@
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { auth } from './config'
 
-const adminAuthHandler = ({ email, password }) => {
+interface AuthData {
+  email: string
+  password: string
+}
+
+const adminAuthHandler = ({ email, password }: AuthData) => {
   return signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      console.log('Successfully signed in => user', userCredential.user)
+      console.log('Successfully signed in = user', userCredential.user)
       return userCredential
     })
     .catch((error) => {

@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,8 +11,27 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useAuth } from '@/context/auth-context'
+import { toast } from 'sonner'
 
 export function ProfileDropdown() {
+  const navigate = useNavigate()
+
+  const {signOut } = useAuth()
+
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      toast.success('Successfully signed out')
+      navigate({ to: '/sign-in-2' })
+    } catch (error) {
+      console.error('Error signing out:', error)
+      toast.error('Error signing out')
+    }
+  }
+
+
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -48,7 +67,7 @@ export function ProfileDropdown() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSignOut}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
