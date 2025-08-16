@@ -8,7 +8,6 @@ import { serverTimestamp } from 'firebase/firestore'
 import 'github-markdown-css/github-markdown.css'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
-import { showSubmittedData } from '@/utils/show-submitted-data'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import DragDrop from '@/components/ui/draganddropimage'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -31,9 +31,11 @@ export default function NewBlogPost() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [content, setContent] = useState('')
+  const [thumbnail, setThumbnail] = useState('')
   const [tags, setTags] = useState<string[]>([])
   const [newTag, setNewTag] = useState('')
   const [previewMode, setPreviewMode] = useState(false)
+  const [base64, setBase64] = useState(null)
 
   const handleAddTag = () => {
     if (newTag.trim() && !tags.includes(newTag.trim())) {
@@ -44,6 +46,19 @@ export default function NewBlogPost() {
 
   const handleRemoveTag = (tagToRemove: string) => {
     setTags(tags.filter((tag) => tag !== tagToRemove))
+  }
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      const maxSizeInBytes = 900 * 1024
+      if (file.size > maxSizeInBytes) {
+        alert('File size exceeds 900 KB. Please choose a smaller file.')
+        e.target.value = ''
+        return
+      }
+      setThumbnail(file)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,6 +77,7 @@ export default function NewBlogPost() {
         publishedAt: serverTimestamp(),
         tags: tags,
         title: title,
+        thumbnail: base64,
       })
       toast.success('Blog Published Sucessfully')
       setTitle('')
@@ -154,6 +170,20 @@ export default function NewBlogPost() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
+                  <Label htmlFor='Image'>Thumbnail</Label>
+                  <Input
+                    type='file'
+                    accept='.jpg,.jpeg,.png'
+                    onChange={handleFileChange}
+                  />
+
+                  {thumbnail && previewMode && (
+                    <img
+                      src={URL.createObjectURL(thumbnail)}
+                      alt='Preview'
+                      className='h-100 w-[100%] rounded-md'
+                    />
+                  )}
                 </div>
 
                 <div className='space-y-2'>
@@ -256,4 +286,3 @@ export default function NewBlogPost() {
     </>
   )
 }
-

@@ -63,9 +63,10 @@ export async function addBlogPost(data) {
       desc: data.desc,
       excerpt: data.excerpt,
       markdown: data.markdown,
-      publishedAt: data.publishedAt, // store as string or Timestamp
-      tags: data.tags, // array of strings
+      publishedAt: data.publishedAt,
+      tags: data.tags,
       title: data.title,
+      thumbnail: data.thumbnail,
     })
     // Optionally: return something if needed, e.g. docRef.id
   } catch (error) {

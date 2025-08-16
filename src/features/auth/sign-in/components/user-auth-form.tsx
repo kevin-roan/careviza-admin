@@ -3,7 +3,8 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from '@tanstack/react-router'
-import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
+import { IconBrandGoogle } from '@tabler/icons-react'
+import adminAuthHandler from '@/firebase/auth'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -40,14 +41,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    // eslint-disable-next-line no-console
-    console.log(data)
-
-    setTimeout(() => {
+    try {
+      await adminAuthHandler(data) // wait for firebase login
+    } finally {
       setIsLoading(false)
-    }, 3000)
+    }
   }
 
   return (
@@ -80,12 +80,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 <PasswordInput placeholder='********' {...field} />
               </FormControl>
               <FormMessage />
-              <Link
-                to='/forgot-password'
-                className='text-muted-foreground absolute -top-0.5 right-0 text-sm font-medium hover:opacity-75'
-              >
-                Forgot password?
-              </Link>
             </FormItem>
           )}
         />
@@ -104,12 +98,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </div>
         </div>
 
-        <div className='grid grid-cols-2 gap-2'>
+        <div className='item-center m-auto flex-1 justify-center self-center'>
           <Button variant='outline' type='button' disabled={isLoading}>
-            <IconBrandGithub className='h-4 w-4' /> GitHub
-          </Button>
-          <Button variant='outline' type='button' disabled={isLoading}>
-            <IconBrandFacebook className='h-4 w-4' /> Facebook
+            <IconBrandGoogle className='h-4 w-4' /> Google
           </Button>
         </div>
       </form>

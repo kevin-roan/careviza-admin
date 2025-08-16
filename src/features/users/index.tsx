@@ -65,9 +65,7 @@ export default function Users() {
       <Main>
         <div className='mb-2 flex flex-wrap items-center justify-between space-y-2'>
           <div>
-            <h2 className='text-2xl font-bold tracking-tight'>
-              Nurse Registration
-            </h2>
+            <a href='/sign-in-2'>Login</a>
             <p className='text-muted-foreground'>
               Manage nurse registrations and applications here.
             </p>
