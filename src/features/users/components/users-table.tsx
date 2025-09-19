@@ -116,8 +116,7 @@ export function UsersTable({ columns, data ,onCallChange}: DataTableProps) {
         ))}
         {/* Call Button Cell */}
         <TableCell>
-          {/* Assuming phone number is in the row original data as row.original.phone */}
-          <a href={`tel:${row.original.phone}`} aria-label="Call phone number">
+          <a href={`tel:${row.original.phone}`} aria-label="Call phone number" className='md:hidden'>
             <button
               type="button"
               className="inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
