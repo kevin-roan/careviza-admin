@@ -77,6 +77,7 @@ export default function Users() {
           <UsersTable
             data={userList}
             columns={getColumns(handleStatusChange)}
+            onCallChange={handleStatusChange}
           />
         </div>
       </Main>

@@ -25,6 +25,7 @@ import {
 import { User } from '../data/schema'
 import { DataTablePagination } from './data-table-pagination'
 import { DataTableToolbar } from './data-table-toolbar'
+import { Phone } from "lucide-react";
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -36,13 +37,17 @@ declare module '@tanstack/react-table' {
 interface DataTableProps {
   columns: ColumnDef<User>[]
   data: User[]
+onCallChange:(id:string,status:boolean)=> void;
 }
 
-export function UsersTable({ columns, data }: DataTableProps) {
+export function UsersTable({ columns, data ,onCallChange}: DataTableProps) {
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [sorting, setSorting] = useState<SortingState>([])
+
+
+
 
   const table = useReactTable({
     data,
@@ -94,26 +99,37 @@ export function UsersTable({ columns, data }: DataTableProps) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  className='group/row'
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cell.column.columnDef.meta?.className ?? ''}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+{table.getRowModel().rows?.length ? (
+    table.getRowModel().rows.map((row) => (
+      <TableRow
+        key={row.id}
+        data-state={row.getIsSelected() && "selected"}
+        className="group/row"
+      >
+        {row.getVisibleCells().map((cell) => (
+          <TableCell
+            key={cell.id}
+            className={cell.column.columnDef.meta?.className ?? ""}
+          >
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </TableCell>
+        ))}
+        {/* Call Button Cell */}
+        <TableCell>
+          {/* Assuming phone number is in the row original data as row.original.phone */}
+          <a href={`tel:${row.original.phone}`} aria-label="Call phone number">
+            <button
+              type="button"
+              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+onClick={() => onCallChange(row.original.id, true)}
+            >
+              <Phone className="h-4 w-4 mr-1" />
+              Call
+            </button>
+          </a>
+        </TableCell>
+      </TableRow>
+    ))
             ) : (
               <TableRow>
                 <TableCell
@@ -131,3 +147,5 @@ export function UsersTable({ columns, data }: DataTableProps) {
     </div>
   )
 }
+
+
